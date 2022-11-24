@@ -19,7 +19,6 @@ class ViewController: UIViewController {
     @IBOutlet var correctWordLabel: UILabel!
     @IBOutlet var scoreLabel: UILabel!
     
-    
     @IBOutlet var letterButtons: [UIButton]!
     
     override func viewDidLoad() {
@@ -33,7 +32,7 @@ class ViewController: UIViewController {
     
     func newRound() {
         let newWord = listOfWords.removeFirst()
-        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
+        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, gessedLetters: [])
         
         updateUI()
     }
@@ -47,6 +46,13 @@ class ViewController: UIViewController {
     
     @IBAction func letterButtonPressed(_ sender: UIButton) {
         sender.isEnabled = false
+        
+        let letterString = sender.configuration!.title!
+        let letter = Character(letterString.lowercased())
+        
+        currentGame.playerGuessed(letter: letter)
+        updateUI()
+        
     }
     
 }
