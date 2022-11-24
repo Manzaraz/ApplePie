@@ -32,13 +32,22 @@ class ViewController: UIViewController {
     
     func newRound() {
         let newWord = listOfWords.removeFirst()
-        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, gessedLetters: [])
+        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, guessedLetters: [])
         
         updateUI()
     }
     
     func updateUI()   {
+        var letters:  Array<String> = []
+        for letter in currentGame.formattedWord {
+            letters.append(String(letter))
+        }
+        
+        let wordWithSpacing = letters.joined(separator: " ")
+        
+        correctWordLabel.text = wordWithSpacing
         scoreLabel.text = "Triunfos: \(totalWins), derrotas: \(totalLosses)"
+        
         treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaining)")
         
         
