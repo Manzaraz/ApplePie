@@ -7,25 +7,33 @@
 
 import UIKit
 
-var listOfWords = [ "corsario", "swift", "glorioso","incandescente", "pestaña", "insecto", "programa"] // Lista de palabras a adivinar
-let incorrectMovesAllowed = 7 // Establece cuántas veces está permitido equivocarse por ronda. Cuanto menor sea el número, más difícil será que el jugador gane
-var totalWins = 0
-var totalLosses = 0
-
-
-
 class ViewController: UIViewController {
+    
     @IBOutlet var treeImageView: UIImageView!
     @IBOutlet var correctWordLabel: UILabel!
     @IBOutlet var scoreLabel: UILabel!
     
     @IBOutlet var letterButtons: [UIButton]!
     
+    var listOfWords = [ "corsario", "swift", "glorioso","incandescente", "pestaña", "insecto", "programa"] // Lista de palabras a adivinar
+    let incorrectMovesAllowed = 7 // Establece cuántas veces está permitido equivocarse por ronda. Cuanto menor sea el número, más difícil será que el jugador gane
+    
+    var totalWins = 0 {
+        didSet {
+            newRound()
+        }
+    }
+    
+    var totalLosses = 0 {
+        didSet {
+            newRound()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         newRound()
-        
     }
     
     var currentGame: Game!
@@ -46,11 +54,10 @@ class ViewController: UIViewController {
         let wordWithSpacing = letters.joined(separator: " ")
         
         correctWordLabel.text = wordWithSpacing
+        
         scoreLabel.text = "Triunfos: \(totalWins), derrotas: \(totalLosses)"
         
         treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaining)")
-        
-        
     }
     
     @IBAction func letterButtonPressed(_ sender: UIButton) {
@@ -60,9 +67,22 @@ class ViewController: UIViewController {
         let letter = Character(letterString.lowercased())
         
         currentGame.playerGuessed(letter: letter)
-        updateUI()
-        
+//        updateUI()
+        updateGameSate()
+    }
+    
+    func updateGameSate(){
+        if currentGame.incorrectMovesRemaining == 0 {
+            totalLosses += 1
+        } else  if currentGame.word == currentGame.formattedWord {
+            totalWins += 1
+        } else {
+            updateUI()
+        }
     }
     
 }
+
+
+
 
