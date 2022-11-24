@@ -39,17 +39,30 @@ class ViewController: UIViewController {
     var currentGame: Game!
     
     func newRound() {
-        let newWord = listOfWords.removeFirst()
-        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, guessedLetters: [])
-        
-        updateUI()
+        if !listOfWords.isEmpty {
+            let newWord = listOfWords.removeFirst()
+            currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed, guessedLetters: [])
+            enableLetterButtons(true)
+            
+            updateUI()
+        } else {
+            enableLetterButtons(false)
+        }
+    }
+    
+    func enableLetterButtons(_ enable: Bool) {
+        for button in letterButtons {
+            button.isEnabled = enable
+        }
     }
     
     func updateUI()   {
-        var letters:  Array<String> = []
-        for letter in currentGame.formattedWord {
-            letters.append(String(letter))
-        }
+        let letters: [String] = currentGame.formattedWord.map({String($0)}) /* En reemplazo de ↓
+     var letters:  Array<String> = []
+     for letter in currentGame.formattedWord {
+         letters.append(String(letter))
+     }
+     */
         
         let wordWithSpacing = letters.joined(separator: " ")
         
@@ -67,7 +80,6 @@ class ViewController: UIViewController {
         let letter = Character(letterString.lowercased())
         
         currentGame.playerGuessed(letter: letter)
-//        updateUI()
         updateGameSate()
     }
     
