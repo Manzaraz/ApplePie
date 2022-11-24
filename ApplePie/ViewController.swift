@@ -13,6 +13,7 @@ var totalWins = 0
 var totalLosses = 0
 
 
+
 class ViewController: UIViewController {
     @IBOutlet var treeImageView: UIImageView!
     @IBOutlet var correctWordLabel: UILabel!
@@ -20,15 +21,30 @@ class ViewController: UIViewController {
     
     
     @IBOutlet var letterButtons: [UIButton]!
-        
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
- 
+        newRound()
+        
     }
     
-
-
+    var currentGame: Game!
+    
+    func newRound() {
+        let newWord = listOfWords.removeFirst()
+        currentGame = Game(word: newWord, incorrectMovesRemaining: incorrectMovesAllowed)
+        
+        updateUI()
+    }
+    
+    func updateUI()   {
+        scoreLabel.text = "Triunfos: \(totalWins), derrotas: \(totalLosses)"
+        treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaining)")
+        
+        
+    }
+    
     @IBAction func letterButtonPressed(_ sender: UIButton) {
         sender.isEnabled = false
     }
